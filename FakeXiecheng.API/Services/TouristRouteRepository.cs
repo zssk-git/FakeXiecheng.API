@@ -16,12 +16,12 @@ namespace FakeXiecheng.API.Services
         }
         public TouristRoute GetTouristRoute(Guid touristRouteId)
         {
-            return _context.touristRoutes.FirstOrDefault(n => n.Id == touristRouteId);
+            return _context.TouristRoutes.FirstOrDefault(n => n.Id == touristRouteId);
         }
 
         public IEnumerable<TouristRoute> GetTouristRoutes()
         {
-            return _context.touristRoutes;
+            return _context.TouristRoutes;
         }
     }
 }

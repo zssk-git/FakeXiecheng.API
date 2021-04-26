@@ -1,0 +1,8 @@
+﻿-----Nuget安装EFCore-----
+Microsoft.EntityFrameworkCore
+Microsoft.EntityFrameworkCore.SqlServer
+Microsoft.EntityFrameworkCore.Tools
+
+-----程序包管理器控制台命令-----
+add-migration initialMigration
+update-database

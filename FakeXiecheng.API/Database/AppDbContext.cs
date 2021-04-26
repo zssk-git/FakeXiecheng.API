@@ -13,7 +13,7 @@ namespace FakeXiecheng.API.Database
         {
 
         }
-        public DbSet<TouristRoute> touristRoutes { get; set; }
-        public DbSet<TouristRoutePicture> touristRoutePictures { get; set; }
+        public DbSet<TouristRoute> TouristRoutes { get; set; }
+        public DbSet<TouristRoutePicture> TouristRoutePictures { get; set; }
     }
 }
