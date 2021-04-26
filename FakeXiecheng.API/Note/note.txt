@@ -6,3 +6,10 @@ Microsoft.EntityFrameworkCore.Tools
 -----程序包管理器控制台命令-----
 add-migration initialMigration
 update-database
+-----终端命令----
+全局安装EF工具：
+dotnet tool install --global dotnet-ef
+dotnet ef migrations add initialMigration
+dotnet ef database update
+dotnet ef migrations add DataSeeding
+dotnet ef database update
