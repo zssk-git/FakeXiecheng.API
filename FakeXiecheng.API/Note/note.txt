@@ -1,4 +1,8 @@
-﻿-----Nuget安装EFCore-----
+﻿-----SqlServer----
+docker run -e 'ACCEPT_EULA=Y' -e 'SA_PASSWORD=Sa123456'  -p 1433:1433 --name mssql  -d microsoft/mssql-server-linux
+
+
+-----Nuget安装EFCore-----
 Microsoft.EntityFrameworkCore
 Microsoft.EntityFrameworkCore.SqlServer
 Microsoft.EntityFrameworkCore.Tools
@@ -15,3 +19,10 @@ dotnet ef migrations add DataSeeding
 dotnet ef database update
 dotnet ef migrations add DataSeeding2
 dotnet ef database update
+dotnet ef migrations add UpdateTouristRouteSchema
+dotnet ef database update
+
+-----MySql------
+docker pull mysql:latest
+
+
