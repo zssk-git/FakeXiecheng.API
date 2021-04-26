@@ -13,3 +13,5 @@ dotnet ef migrations add initialMigration
 dotnet ef database update
 dotnet ef migrations add DataSeeding
 dotnet ef database update
+dotnet ef migrations add DataSeeding2
+dotnet ef database update
