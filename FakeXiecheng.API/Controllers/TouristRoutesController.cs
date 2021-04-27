@@ -32,7 +32,12 @@ namespace FakeXiecheng.API.Controllers
         [HttpGet("{touristRouteId}")]
         public IActionResult GetTouristRouteById(Guid touristRouteId)
         {
-            return Ok(_touristRouteRepository.GetTouristRoute(touristRouteId));
+            var touristRouteFromRepo = _touristRouteRepository.GetTouristRoute(touristRouteId);
+            if (touristRouteFromRepo == null)
+            {
+                return NotFound($"旅游路线{touristRouteId} 找不到");
+            }
+            return Ok(touristRouteFromRepo);
         }
     }
 }
