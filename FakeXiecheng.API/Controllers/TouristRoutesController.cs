@@ -18,10 +18,21 @@ namespace FakeXiecheng.API.Controllers
         {
             _touristRouteRepository = touristRouteRepository;
         }
+        [HttpGet]
         public IActionResult GetTouristRoutes()
         {
-            var routes = _touristRouteRepository.GetTouristRoutes();
-            return Ok(routes);
+            var touristRoutesFromRepo  = _touristRouteRepository.GetTouristRoutes();
+            if (touristRoutesFromRepo == null || touristRoutesFromRepo.Count() <= 0)
+            {
+                return NotFound("没有旅游路线");
+            }
+            return Ok(touristRoutesFromRepo);
+        }
+        //api/tourist/{touristRouteId}
+        [HttpGet("{touristRouteId}")]
+        public IActionResult GetTouristRouteById(Guid touristRouteId)
+        {
+            return Ok(_touristRouteRepository.GetTouristRoute(touristRouteId));
         }
     }
 }
