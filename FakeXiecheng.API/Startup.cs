@@ -31,7 +31,8 @@ namespace FakeXiecheng.API
             services.AddDbContext<AppDbContext>(option =>
             {
                 //option.UseSqlServer("server=192.168.31.157,1433;Database=FakeXiechengDb;User Id=sa;Password=Sa123456");
-                option.UseSqlServer(Configuration["DbContext:ConnectionString"]);
+                //option.UseSqlServer(Configuration["DbContext:MsSQLConnectionString"]);
+                option.UseMySql(Configuration["DbContext:MySQLConnectionString"]);
             });
         }
 

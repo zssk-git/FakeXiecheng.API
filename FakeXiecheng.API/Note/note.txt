@@ -7,6 +7,9 @@ Microsoft.EntityFrameworkCore
 Microsoft.EntityFrameworkCore.SqlServer
 Microsoft.EntityFrameworkCore.Tools
 
+"ConnectionString":"Server=192.168.31.157,1433;Database=FakeXiechengDb;User Id=sa;Password=Sa123456;"
+ 
+
 -----程序包管理器控制台命令-----
 add-migration initialMigration
 update-database
@@ -24,5 +27,19 @@ dotnet ef database update
 
 -----MySql------
 docker pull mysql:latest
+docker run -itd --name mysql-test -p 3306:3306 -e MYSQL_ROOT_PASSWORD=123456 mysql
+
+----Nuget-----
+Pomelo.EntityFrameworkCore.MySql
+
+"MySQLConnectionString": "Server=192.168.31.157,3306;Database=FakeXiechengDb;uid=root;pwd=MySql.123;"
+
+
+----终端----
+ dotnet ef migrations add MySqlInit
+ dotnet ef database update
+  
+
+
 
 
