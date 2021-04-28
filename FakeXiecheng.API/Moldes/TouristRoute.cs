@@ -19,7 +19,7 @@ namespace FakeXiecheng.API.Moldes
         [MaxLength(1500)]
         public string Description { get; set; }
         [Column(TypeName = "decimal(18,2)")]
-        public decimal? OriginalPrice { get; set; }
+        public decimal OriginalPrice { get; set; }
         [Range(0.0,1.0)]
         public double? DiscountPresent { get; set; }
         public DateTime CreateTime { get; set; }
