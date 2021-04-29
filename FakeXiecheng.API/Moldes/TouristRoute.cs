@@ -24,7 +24,7 @@ namespace FakeXiecheng.API.Moldes
         public double? DiscountPresent { get; set; }
         public DateTime CreateTime { get; set; }
         public DateTime? UpdateTime { get; set; }
-        public DateTime DapartureTime { get; set; }
+        public DateTime? DepartureTime { get; set; }
         [MaxLength]
         public string Features { get; set; }
         [MaxLength]

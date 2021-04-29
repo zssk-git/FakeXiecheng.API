@@ -23,6 +23,7 @@ namespace FakeXiecheng.API.Controllers
             _mapper = mapper;
         }
         [HttpGet]
+        [HttpHead]
         public IActionResult GetTouristRoutes()
         {
             var touristRoutesFromRepo  = _touristRouteRepository.GetTouristRoutes();

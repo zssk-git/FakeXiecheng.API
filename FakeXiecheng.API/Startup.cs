@@ -12,6 +12,8 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.Mvc.Formatters;
+using FakeXiecheng.API.Profiles;
+using AutoMapper;
 
 namespace FakeXiecheng.API
 {
@@ -37,11 +39,12 @@ namespace FakeXiecheng.API
             services.AddDbContext<AppDbContext>(option =>
             {
                 //option.UseSqlServer("server=192.168.31.157,1433;Database=FakeXiechengDb;User Id=sa;Password=Sa123456");
-                //option.UseSqlServer(Configuration["DbContext:MsSQLConnectionString"]);
-                option.UseMySql(Configuration["DbContext:MySQLConnectionString"]);
+                option.UseSqlServer(Configuration["DbContext:MsSQLConnectionString"]);
+                //option.UseMySql(Configuration["DbContext:MySQLConnectionString"]);
             });
             //É¨ÃèprofileÎÄ¼þ
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+            //services.AddAutoMapper(typeof(TouristRouteProfile).Assembly, typeof(TouristRoutePictureProfile).Assembly);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

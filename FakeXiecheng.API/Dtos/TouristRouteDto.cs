@@ -17,7 +17,7 @@ namespace FakeXiecheng.API.Dtos
         //public double? DiscountPresent { get; set; }
         public DateTime CreateTime { get; set; }
         public DateTime? UpdateTime { get; set; }
-        public DateTime DapartureTime { get; set; }
+        public DateTime? DepartureTime { get; set; }
         public string Features { get; set; }
         public string Fees { get; set; }
         public string Notes { get; set; }
@@ -25,5 +25,7 @@ namespace FakeXiecheng.API.Dtos
         public string TravelDays { get; set; }
         public string TripType { get; set; }
         public string DepartureCity { get; set; }
+
+        public ICollection<TouristRoutePictureDto> TouristRoutePictures { get; set; }
     }
 }
