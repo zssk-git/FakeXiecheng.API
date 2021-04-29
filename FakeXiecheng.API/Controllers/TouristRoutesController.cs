@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace FakeXiecheng.API.Controllers
@@ -22,12 +23,29 @@ namespace FakeXiecheng.API.Controllers
             _touristRouteRepository = touristRouteRepository;
             _mapper = mapper;
         }
-        //api/touristRoutes?keyword=传入的参数
+        /// <summary>
+        /// api/touristRoutes?keyword=传入的参数&rating=largerThan2
+        /// http://localhost:56036/api/touristroutes?keyword=埃及&rating=largerThan2
+        /// http://localhost:56036/api/touristroutes?rating=largerThan4
+        /// </summary>
+        /// <param name="keyword">FromQuery vs FromBody</param>
+        /// <param name="rating">小于lessThan,大于largerThan,等于equalTo lessThan3,largerThan2,equalTo5</param>
+        /// <returns></returns>
         [HttpGet]
         [HttpHead]
-        public IActionResult GetTouristRoutes([FromQuery] string keyword)//FromQuery vs FromBody
+        public IActionResult GetTouristRoutes([FromQuery] string keyword,string rating)
         {
-            var touristRoutesFromRepo  = _touristRouteRepository.GetTouristRoutes(keyword);
+            Regex regex = new Regex(@"([A-Za-z0-9\-]+)(\d+)");
+            string operatorType="";
+            int raringValue= -1;
+
+            Match match = regex.Match(rating);
+            if (match.Success)
+            {
+                operatorType = match.Groups[1].Value;
+                raringValue = Int32.Parse(match.Groups[2].Value);
+            }
+            var touristRoutesFromRepo  = _touristRouteRepository.GetTouristRoutes(keyword, operatorType,raringValue);
             if (touristRoutesFromRepo == null || touristRoutesFromRepo.Count() <= 0)
             {
                 return NotFound("没有旅游路线");
@@ -35,7 +53,7 @@ namespace FakeXiecheng.API.Controllers
             var touristRoutesDto = _mapper.Map<IEnumerable<TouristRouteDto>>(touristRoutesFromRepo);
             return Ok(touristRoutesDto);
         }
-        //api/tourist/{touristRouteId}
+        //api/touristRoutes/{touristRouteId}
         [HttpGet("{touristRouteId}")]
         public IActionResult GetTouristRouteById(Guid touristRouteId)
         {
