@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using FakeXiecheng.API.Dtos;
+using FakeXiecheng.API.ResourceParameters;
 using FakeXiecheng.API.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -31,21 +32,35 @@ namespace FakeXiecheng.API.Controllers
         /// <param name="keyword">FromQuery vs FromBody</param>
         /// <param name="rating">小于lessThan,大于largerThan,等于equalTo lessThan3,largerThan2,equalTo5</param>
         /// <returns></returns>
+        //[HttpGet]
+        //[HttpHead]
+        //public IActionResult GetTouristRoutes([FromQuery] string keyword,string rating)
+        //{
+        //    Regex regex = new Regex(@"([A-Za-z0-9\-]+)(\d+)");
+        //    string operatorType="";
+        //    int raringValue= -1;
+
+        //    Match match = regex.Match(rating);
+        //    if (match.Success)
+        //    {
+        //        operatorType = match.Groups[1].Value;
+        //        raringValue = Int32.Parse(match.Groups[2].Value);
+        //    }
+        //    var touristRoutesFromRepo  = _touristRouteRepository.GetTouristRoutes(keyword, operatorType,raringValue);
+        //    if (touristRoutesFromRepo == null || touristRoutesFromRepo.Count() <= 0)
+        //    {
+        //        return NotFound("没有旅游路线");
+        //    }
+        //    var touristRoutesDto = _mapper.Map<IEnumerable<TouristRouteDto>>(touristRoutesFromRepo);
+        //    return Ok(touristRoutesDto);
+        //}
+
         [HttpGet]
         [HttpHead]
-        public IActionResult GetTouristRoutes([FromQuery] string keyword,string rating)
+        public IActionResult GetTouristRoutes([FromQuery] TouristRouteResourceParameters parameters)
         {
-            Regex regex = new Regex(@"([A-Za-z0-9\-]+)(\d+)");
-            string operatorType="";
-            int raringValue= -1;
-
-            Match match = regex.Match(rating);
-            if (match.Success)
-            {
-                operatorType = match.Groups[1].Value;
-                raringValue = Int32.Parse(match.Groups[2].Value);
-            }
-            var touristRoutesFromRepo  = _touristRouteRepository.GetTouristRoutes(keyword, operatorType,raringValue);
+            
+            var touristRoutesFromRepo = _touristRouteRepository.GetTouristRoutes(parameters.Keyword, parameters.RatingOperator, parameters.RatingValue);
             if (touristRoutesFromRepo == null || touristRoutesFromRepo.Count() <= 0)
             {
                 return NotFound("没有旅游路线");
