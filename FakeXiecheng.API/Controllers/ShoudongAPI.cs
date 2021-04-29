@@ -12,6 +12,7 @@ namespace FakeXiecheng.API.Controllers
     //public class ShoudongAPIContorller
     public class ShoudongAPI:Controller
     {
+        [HttpGet]
         public IEnumerable<string> Get()
         {
             return new string[] { "a", "b" };

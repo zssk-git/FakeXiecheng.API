@@ -14,6 +14,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.Mvc.Formatters;
 using FakeXiecheng.API.Profiles;
 using AutoMapper;
+using Microsoft.OpenApi.Models;
 
 namespace FakeXiecheng.API
 {
@@ -45,6 +46,10 @@ namespace FakeXiecheng.API
             //É¨ÃèprofileÎÄ¼þ
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             //services.AddAutoMapper(typeof(TouristRouteProfile).Assembly, typeof(TouristRoutePictureProfile).Assembly);
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "FakeXiecheng.API", Version = "v1" });
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -53,6 +58,8 @@ namespace FakeXiecheng.API
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+                app.UseSwagger();
+                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "FakeXiecheng.API v1"));
             }
 
             app.UseRouting();
