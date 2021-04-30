@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 
 namespace FakeXiecheng.API.Controllers
 {
+    
     [Route("api/touristRoutes/{touristRouteId}/pictures")]
     [ApiController]
     public class TouristRoutePicturesController : ControllerBase
@@ -22,6 +23,11 @@ namespace FakeXiecheng.API.Controllers
             _touristRouteRepository = touristRouteRepository ?? throw new ArgumentNullException(nameof(touristRouteRepository));
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
+        /// <summary>
+        /// http://localhost:5000/api/touristRoutes/0729a845-4951-4a02-bb09-0934d4d9beb0/pictures
+        /// </summary>
+        /// <param name="touristRouteId"></param>
+        /// <returns></returns>
         [HttpGet]
         public IActionResult GetPictureListForTouristRoute(Guid touristRouteId)
         {
@@ -36,6 +42,12 @@ namespace FakeXiecheng.API.Controllers
             }
             return Ok(_mapper.Map<IEnumerable<TouristRoutePictureDto>>(picturesFormRepo));
         }
+        /// <summary>
+        /// http://localhost:5000/api/touristRoutes/0729a845-4951-4a02-bb09-0934d4d9beb0/pictures/70
+        /// </summary>
+        /// <param name="touristRouteId"></param>
+        /// <param name="pictureId"></param>
+        /// <returns></returns>
         [HttpGet("{pictureId}",Name = "GetPictrue")]
         public IActionResult GetPictrue(Guid touristRouteId,int pictureId)
         {
@@ -50,6 +62,12 @@ namespace FakeXiecheng.API.Controllers
             }
             return Ok(_mapper.Map<TouristRoutePictureDto>(pictureFromRepo));
         }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="touristRouteId"></param>
+        /// <param name="touristRoutePictureForCreationDto"></param>
+        /// <returns></returns>
         [HttpPost]
         public IActionResult CreateTouristRoutePicture([FromRoute] Guid touristRouteId,[FromBody] TouristRoutePictureForCreationDto touristRoutePictureForCreationDto)
         {
