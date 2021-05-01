@@ -1,11 +1,13 @@
 ﻿using AutoMapper;
 using FakeXiecheng.API.Dtos;
+using FakeXiecheng.API.Helper;
 using FakeXiecheng.API.Moldes;
 using FakeXiecheng.API.ResourceParameters;
 using FakeXiecheng.API.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -194,6 +196,25 @@ namespace FakeXiecheng.API.Controllers
             }
             var touristRoute = _touristRouteRepository.GetTouristRoute(touristRouteId);
             _touristRouteRepository.DeleteTouristRoute(touristRoute);
+            _touristRouteRepository.Save();
+            return NoContent();
+        }
+        /// <summary>
+        /// 批量删除请求
+        /// http://localhost:5000/api/TouristRoutes/(6db1c454-03fb-48e9-b5d0-437b9ad8e425,39996f34-013c-4fc6-b1b3-0c1036c47112)
+        /// </summary>
+        /// <param name="touristIDs"></param>
+        /// <returns></returns>
+        [HttpDelete("({touristIDs})")]
+        public IActionResult DeleteByIDs(
+            [ModelBinder(BinderType = typeof(ArrayModelBinder))][FromRoute] IEnumerable<Guid> touristIDs)
+        {
+            if (touristIDs == null)
+            {
+                return BadRequest();
+            }
+            var touristRoutesFromRepo = _touristRouteRepository.GetTouristRoutesByIDList(touristIDs);
+            _touristRouteRepository.DeleteTouristRoutes(touristRoutesFromRepo);
             _touristRouteRepository.Save();
             return NoContent();
         }
