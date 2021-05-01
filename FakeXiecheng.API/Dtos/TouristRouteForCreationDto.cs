@@ -7,40 +7,10 @@ using System.Threading.Tasks;
 
 namespace FakeXiecheng.API.Dtos
 {
-    [TouristRouteTitleMustBeDifferentFromDescriptionAttribute]
-    public class TouristRouteForCreationDto//:IValidatableObject
+   
+    public class TouristRouteForCreationDto :TouristRouteForManipulationDto//:IValidatableObject
     {
-        [Required (ErrorMessage = "tile 不可为空")]//数据验证
-        [MaxLength(100)]
-        public string Title { get; set; }
-        [Required]
-        [MaxLength(1500)]
-        public string Description { get; set; }
-        //计算方式：原价 * 折扣
-        //public decimal Price { get; set; }
-        public decimal? OriginalPrice { get; set; }
-        public double? DiscountPresent { get; set; }
-        public DateTime CreateTime { get; set; }
-        public DateTime? UpdateTime { get; set; }
-        public DateTime? DepartureTime { get; set; }
-        public string Features { get; set; }
-        public string Fees { get; set; }
-        public string Notes { get; set; }
-        public double? Rating { get; set; }
-        public string TravelDays { get; set; }
-        public string TripType { get; set; }
-        public string DepartureCity { get; set; }
-        public ICollection<TouristRoutePictureForCreationDto> TouristRoutePictures { get; set; } = new List<TouristRoutePictureForCreationDto>();
-        //属性级别数据验证
-        //public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
-        //{
-        //    if (Title == Description)
-        //    {
-        //        yield return new ValidationResult(
-        //            "路线名称必须与路线描述不同",
-        //            new[] { "TouristRouteForCreationDto" }
-        //            );
-        //    }
-        //}
+        
+        
     }
 }
