@@ -180,5 +180,22 @@ namespace FakeXiecheng.API.Controllers
             return NoContent();
 
         }
+        /// <summary>
+        /// 删除TouristRoute
+        /// </summary>
+        /// <param name="touristRouteId"></param>
+        /// <returns></returns>
+        [HttpDelete("{touristRouteId}")]
+        public IActionResult DeteteTouristRoute([FromRoute] Guid touristRouteId)
+        {
+            if (!_touristRouteRepository.TouristRouteExists(touristRouteId))
+            {
+                return NotFound("旅游路线找不到");
+            }
+            var touristRoute = _touristRouteRepository.GetTouristRoute(touristRouteId);
+            _touristRouteRepository.DeleteTouristRoute(touristRoute);
+            _touristRouteRepository.Save();
+            return NoContent();
+        }
     }
 }
