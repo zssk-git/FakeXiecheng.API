@@ -24,6 +24,7 @@ namespace FakeXiecheng.API.Controllers
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
         /// <summary>
+        /// 获取图片列表
         /// http://localhost:5000/api/touristRoutes/0729a845-4951-4a02-bb09-0934d4d9beb0/pictures
         /// </summary>
         /// <param name="touristRouteId"></param>
@@ -43,6 +44,7 @@ namespace FakeXiecheng.API.Controllers
             return Ok(_mapper.Map<IEnumerable<TouristRoutePictureDto>>(picturesFormRepo));
         }
         /// <summary>
+        /// 获取图片
         /// http://localhost:5000/api/touristRoutes/0729a845-4951-4a02-bb09-0934d4d9beb0/pictures/70
         /// </summary>
         /// <param name="touristRouteId"></param>
@@ -63,7 +65,7 @@ namespace FakeXiecheng.API.Controllers
             return Ok(_mapper.Map<TouristRoutePictureDto>(pictureFromRepo));
         }
         /// <summary>
-        /// 
+        /// 添加图片
         /// </summary>
         /// <param name="touristRouteId"></param>
         /// <param name="touristRoutePictureForCreationDto"></param>
@@ -87,6 +89,25 @@ namespace FakeXiecheng.API.Controllers
             },
             pictureToReturn
             );
+        }
+        /// <summary>
+        /// 删除图片
+        /// http://localhost:5000/api/touristRoutes/4eeb724b-6e47-4aec-9755-a3dae93c434d/pictures/69
+        /// </summary>
+        /// <param name="touristRouteId"></param>
+        /// <param name="pictureId"></param>
+        /// <returns></returns>
+        [HttpDelete("{pictureId}")]
+        public IActionResult DeletePicture([FromRoute] Guid touristRouteId,[FromRoute] int pictureId)
+        {
+            if (!_touristRouteRepository.TouristRouteExists(touristRouteId))
+            {
+                return NotFound("旅游路线不存在");
+            }
+            var picture = _touristRouteRepository.GetPicture(pictureId);
+            _touristRouteRepository.DeleteTouristRoutePicture(picture);
+            _touristRouteRepository.Save();
+            return NoContent();
         }
     }
 }
