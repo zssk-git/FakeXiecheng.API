@@ -153,7 +153,7 @@ namespace FakeXiecheng.API.Controllers
 
         }
         /// <summary>
-        /// 局部更新
+        /// 局部更新TouristRoute
         /// </summary>
         /// <param name="touristRouteId"></param>
         /// <param name="patchDocument"></param>
@@ -168,8 +168,13 @@ namespace FakeXiecheng.API.Controllers
 
             var touristRouteFromRepo = _touristRouteRepository.GetTouristRoute(touristRouteId);
             var touristRouteToPatch = _mapper.Map<TouristRouteForUpdateDto>(touristRouteFromRepo);
-            patchDocument.ApplyTo(touristRouteToPatch);
-            
+            patchDocument.ApplyTo(touristRouteToPatch,ModelState);
+            //数据验证
+            if (!TryValidateModel(touristRouteToPatch))
+            {
+                return ValidationProblem(ModelState);
+            }
+
             _mapper.Map(touristRouteToPatch, touristRouteFromRepo);
             _touristRouteRepository.Save();
             return NoContent();
