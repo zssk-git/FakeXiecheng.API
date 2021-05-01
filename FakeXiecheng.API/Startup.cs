@@ -16,6 +16,7 @@ using FakeXiecheng.API.Profiles;
 using AutoMapper;
 using Microsoft.OpenApi.Models;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json.Serialization;
 
 namespace FakeXiecheng.API
 {
@@ -36,7 +37,12 @@ namespace FakeXiecheng.API
                 setupAction.ReturnHttpNotAcceptable = true;
                 //setupAction.OutputFormatters.Add(
                 //    new XmlDataContractSerializerOutputFormatter());//支持XML
-            }).AddXmlDataContractSerializerFormatters()//支持XML
+            })
+            .AddNewtonsoftJson(setupAction =>
+            {
+                setupAction.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+            })
+            .AddXmlDataContractSerializerFormatters()//支持XML
             .ConfigureApiBehaviorOptions(setupAction =>//输出状态码422
             {
                 setupAction.InvalidModelStateResponseFactory = context =>

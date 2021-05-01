@@ -4,6 +4,7 @@ using FakeXiecheng.API.Moldes;
 using FakeXiecheng.API.ResourceParameters;
 using FakeXiecheng.API.Services;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -130,7 +131,7 @@ namespace FakeXiecheng.API.Controllers
             return CreatedAtRoute("GetTouristRouteById", new { touristRouteId = touristRouteToReture.Id }, touristRouteToReture);
         }
         /// <summary>
-        /// 更新TouristRoute
+        /// 全局更新TouristRoute
         /// </summary>
         /// <param name="touristRouteId"></param>
         /// <param name="touristRouteForUpdateDto"></param>
@@ -147,6 +148,29 @@ namespace FakeXiecheng.API.Controllers
             //2.更新dto
             //3.映射model
             _mapper.Map(touristRouteForUpdateDto, touristRouteFormRepo);
+            _touristRouteRepository.Save();
+            return NoContent();
+
+        }
+        /// <summary>
+        /// 局部更新
+        /// </summary>
+        /// <param name="touristRouteId"></param>
+        /// <param name="patchDocument"></param>
+        /// <returns></returns>
+        [HttpPatch("{touristRouteId}")]
+        public IActionResult PartiallyUpdateTouristRoute([FromRoute]Guid touristRouteId, [FromBody] JsonPatchDocument<TouristRouteForUpdateDto> patchDocument)
+        {
+            if (!_touristRouteRepository.TouristRouteExists(touristRouteId))
+            {
+                return NotFound("旅游路线找不到");
+            }
+
+            var touristRouteFromRepo = _touristRouteRepository.GetTouristRoute(touristRouteId);
+            var touristRouteToPatch = _mapper.Map<TouristRouteForUpdateDto>(touristRouteFromRepo);
+            patchDocument.ApplyTo(touristRouteToPatch);
+            
+            _mapper.Map(touristRouteToPatch, touristRouteFromRepo);
             _touristRouteRepository.Save();
             return NoContent();
 
