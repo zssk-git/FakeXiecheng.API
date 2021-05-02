@@ -1,19 +1,23 @@
-﻿-----SqlServer----
+﻿-----SqlServer-Docker----
 docker run -e 'ACCEPT_EULA=Y' -e 'SA_PASSWORD=Sa123456'  -p 1433:1433 --name mssql  -d microsoft/mssql-server-linux
-
+systemctl start docker
+docker ps -a
+docker start 6c69
 
 -----Nuget安装EFCore-----
 Microsoft.EntityFrameworkCore
 Microsoft.EntityFrameworkCore.SqlServer
 Microsoft.EntityFrameworkCore.Tools
 
-"ConnectionString":"Server=192.168.31.157,1433;Database=FakeXiechengDb;User Id=sa;Password=Sa123456;"
+----SqlServer连接字符串----
+"MsSQLConnectionString":"Server=192.168.31.157,1433;Database=FakeXiechengDb;User Id=sa;Password=Sa123456;"
  
 
------程序包管理器控制台命令-----
+-----EFC-程序包管理器控制台命令-----
 add-migration initialMigration
 update-database
------终端命令----
+
+-----EFC-终端命令----
 全局安装EF工具：
 dotnet tool install --global dotnet-ef
 dotnet ef migrations add initialMigration
@@ -25,19 +29,31 @@ dotnet ef database update
 dotnet ef migrations add UpdateTouristRouteSchema
 dotnet ef database update
 
------MySql------
+
+
+-----MySql-Docker------
 docker pull mysql:latest
 docker run -itd --name mysql-test -p 3306:3306 -e MYSQL_ROOT_PASSWORD=123456 mysql
 
 ----Nuget-----
 Pomelo.EntityFrameworkCore.MySql
 
+----SqlServer连接字符串----
 "MySQLConnectionString": "Server=192.168.31.157,3306;Database=FakeXiechengDb;uid=root;pwd=MySql.123;"
 
 
-----终端----
+----EFC-终端命令----
  dotnet ef migrations add MySqlInit
  dotnet ef database update
+
+
+ ----用户模型设计与数据库更新----
+ ---Nuget----
+ Microsoft.AspNetCore.Identity.EntityFrameworkCore
+ ----EFC终端命令----
+ dotnet ef migrations add IdentityMigration
+ dotnet ef database update
+
   
 
 
