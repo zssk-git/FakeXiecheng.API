@@ -1,4 +1,5 @@
 ﻿using FakeXiecheng.API.Dtos;
+using FakeXiecheng.API.Moldes;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -20,9 +21,9 @@ namespace FakeXiecheng.API.Controllers
     public class AutheticateController : ControllerBase
     {
         private readonly IConfiguration _configuration;
-        private readonly UserManager<IdentityUser> _userManager;
-        private readonly SignInManager<IdentityUser> _signInManager;
-        public AutheticateController(IConfiguration configuration,UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager)
+        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly SignInManager<ApplicationUser> _signInManager;
+        public AutheticateController(IConfiguration configuration,UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager)
         {
             _configuration = configuration;
             _userManager = userManager;
@@ -96,7 +97,7 @@ namespace FakeXiecheng.API.Controllers
         public async Task<IActionResult> Register([FromBody] RegisterDto registerDto)
         {
             //1.使用用户名创建用户对象
-            var user = new IdentityUser()
+            var user = new ApplicationUser()
             {
                 UserName = registerDto.Email,
                 Email = registerDto.Email

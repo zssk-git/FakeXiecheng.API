@@ -54,6 +54,12 @@ Pomelo.EntityFrameworkCore.MySql
  dotnet ef migrations add IdentityMigration
  dotnet ef database update
 
+ ----定制用户模型并添加初始化用户数据-----
+  ----EFC终端命令----
+  dotnet ef migrations add ApplicationUserMigration
+  dotnet ef database update
+
+
   
 
 
