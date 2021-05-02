@@ -1,6 +1,7 @@
 ﻿using FakeXiecheng.API.Dtos;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
@@ -19,9 +20,13 @@ namespace FakeXiecheng.API.Controllers
     public class AutheticateController : ControllerBase
     {
         private readonly IConfiguration _configuration;
-        public AutheticateController(IConfiguration configuration)
+        private readonly UserManager<IdentityUser> _userManager;
+        private readonly SignInManager<IdentityUser> _signInManager;
+        public AutheticateController(IConfiguration configuration,UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager)
         {
             _configuration = configuration;
+            _userManager = userManager;
+            _signInManager = signInManager;
         }
         /**
         * {
@@ -31,20 +36,37 @@ namespace FakeXiecheng.API.Controllers
         */
         [AllowAnonymous]
         [HttpPost("login")]
-        public IActionResult Login([FromBody] LoginDto loginDto)
+        public async Task<IActionResult> Login([FromBody] LoginDto loginDto)
         {
             //1.验证用户名密码
-
+            var loginResult = await _signInManager.PasswordSignInAsync(
+                loginDto.Email,
+                loginDto.Password,
+                false,
+                false
+                );
+            if (!loginResult.Succeeded)
+            {
+                return BadRequest();
+            }
+            var user = await _userManager.FindByNameAsync(loginDto.Email);
             //2.创建jwt
             //header
             var signingAlgorithm = SecurityAlgorithms.HmacSha256;
             //payload
-            var claims = new[]
+            var claims = new List<Claim>
             {
                 // sub
-                new Claim(JwtRegisteredClaimNames.Sub,"fake_user_id"),
-                new Claim(ClaimTypes.Role,"Admin")
+                new Claim(JwtRegisteredClaimNames.Sub,user.Id),
+                //new Claim(ClaimTypes.Role,"Admin")
+
             };
+            var roleNames = await _userManager.GetRolesAsync(user);
+            foreach (var roleName in roleNames)
+            {
+                var roleClaim = new Claim(ClaimTypes.Role, roleName);
+                claims.Add(roleClaim);
+            }
             //signiture
             var secretByte = Encoding.UTF8.GetBytes(_configuration["Authentication:Secretkey"]);
             var signingkey = new SymmetricSecurityKey(secretByte);
@@ -61,6 +83,32 @@ namespace FakeXiecheng.API.Controllers
             var tokenStr = new JwtSecurityTokenHandler().WriteToken(token);
             //3 return 200 ok + jwt
             return Ok(tokenStr);
+        }
+        /**
+         * {
+            "email": "zssk1@163.com",
+            "password": "Zssk@123456",
+            "confirmPassword": "Zssk@123456"
+           }
+         */
+        [AllowAnonymous]
+        [HttpPost("register")]
+        public async Task<IActionResult> Register([FromBody] RegisterDto registerDto)
+        {
+            //1.使用用户名创建用户对象
+            var user = new IdentityUser()
+            {
+                UserName = registerDto.Email,
+                Email = registerDto.Email
+            };
+            //2.hash密码，保存用户
+            var result = await _userManager.CreateAsync(user, registerDto.Password);
+            if (!result.Succeeded)
+            {
+                return BadRequest();
+            }
+            //3.return
+            return Ok();
         }
     }
 }
