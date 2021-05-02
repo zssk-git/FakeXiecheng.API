@@ -23,6 +23,12 @@ namespace FakeXiecheng.API.Controllers
         {
             _configuration = configuration;
         }
+        /**
+        * {
+            "email": "zssk@163.com",
+            "password": "123456"
+           }
+        */
         [AllowAnonymous]
         [HttpPost("login")]
         public IActionResult Login([FromBody] LoginDto loginDto)
@@ -36,7 +42,8 @@ namespace FakeXiecheng.API.Controllers
             var claims = new[]
             {
                 // sub
-                new Claim(JwtRegisteredClaimNames.Sub,"fake_user_id")
+                new Claim(JwtRegisteredClaimNames.Sub,"fake_user_id"),
+                new Claim(ClaimTypes.Role,"Admin")
             };
             //signiture
             var secretByte = Encoding.UTF8.GetBytes(_configuration["Authentication:Secretkey"]);

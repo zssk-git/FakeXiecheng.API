@@ -151,7 +151,7 @@ namespace FakeXiecheng.API.Controllers
          }
          */
         [HttpPost]
-        [Authorize]
+        [Authorize(Roles ="Admin")]
         public async Task<IActionResult> CreateTouristRoute([FromBody] TouristRouteForCreationDto touristRouteForCreationDto)
         {
             var touristRouteModel = _mapper.Map<TouristRoute>(touristRouteForCreationDto);
