@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using FakeXiecheng.API.Dtos;
+using FakeXiecheng.API.Helper;
 using FakeXiecheng.API.Moldes;
 using FakeXiecheng.API.Services;
 using Microsoft.AspNetCore.Authorization;
@@ -107,5 +108,25 @@ namespace FakeXiecheng.API.Controllers
 
             return NoContent();
         }
+        /// <summary>
+        /// 从购物车批量删除商品
+        /// http://localhost:5000/api/shoppingcart/items/(6,8,10)
+        /// </summary>
+        /// <param name="itemIDs"></param>
+        /// <returns></returns>
+        [HttpDelete ("items/({itemIDs})")]
+        [Authorize(AuthenticationSchemes = "Bearer")]
+        public async Task<IActionResult> RemoveShoppingCartItems(
+            [ModelBinder(BinderType =typeof(ArrayModelBinder))]
+            [FromRoute] IEnumerable<int> itemIDs)
+        {
+            var lineItems = await _touristRouteRepository.GetShoppingCartsByIdListAsync(itemIDs);
+
+            _touristRouteRepository.DeleteShoppingCartItems(lineItems);
+            await _touristRouteRepository.SaveAsync();
+
+            return NoContent();
+        }
     }
+
 }

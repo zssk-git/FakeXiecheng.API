@@ -25,6 +25,7 @@ namespace FakeXiecheng.API.Services
         Task AddShoppingCartItem(LineItem lineItem);
         Task<LineItem> GetShoppingCartIntemByItemId(int lineItemId);
         void DeleteShoppingCartItem(LineItem lineItem);
-        
+        Task<IEnumerable<LineItem>> GetShoppingCartsByIdListAsync(IEnumerable<int> ids);
+        void DeleteShoppingCartItems(IEnumerable<LineItem> lineItems);
     }
 }
