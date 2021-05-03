@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using FakeXiecheng.API.Dtos;
+using FakeXiecheng.API.Moldes;
 using FakeXiecheng.API.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -28,6 +29,11 @@ namespace FakeXiecheng.API.Controllers
             _touristRouteRepository = touristRouteRepository;
             _mapper = mapper;
         }
+        /// <summary>
+        /// 获取当前用户购物车信息
+        /// http://localhost:5000/api/shoppingcart
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         [Authorize]
         public async Task<IActionResult> GetShoppingCart()
@@ -40,6 +46,45 @@ namespace FakeXiecheng.API.Controllers
 
             return Ok(_mapper.Map<ShoppingCartDto>(shoppingCart));
 
+        }
+        /// <summary>
+        /// 向购物车加入商品
+        /// http://localhost:5000/api/shoppingcart/items
+        /// </summary>
+        /// <param name="addShoppingCartItemDto"></param>
+        /// <returns></returns>
+        /**
+         {
+            "touristRouteId":"06f8370d-52f2-4766-bf38-f115cd62dc97"
+         }
+         * */
+        [HttpPost("items")]
+        [Authorize(AuthenticationSchemes = "Bearer")]
+        public async Task<IActionResult> AddShppingCartItem([FromBody]AddShoppingCartItemDto addShoppingCartItemDto)
+        {
+            //1 获得当前用户
+            var userId = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+
+            //2 使用userid获取购物车
+            var shoppingCart = await _touristRouteRepository.GetShoppingCartByUserId(userId);
+
+            //3 创建lineItem
+            var touristRoute = await _touristRouteRepository.GetTouristRouteAsync(addShoppingCartItemDto.TouristRouteId);
+            if (touristRoute == null)
+            {
+                return NotFound("旅游路线不存在");
+            }
+            var lineItem = new LineItem()
+            {
+                TouristRouteId = addShoppingCartItemDto.TouristRouteId,
+                ShoppingCartId = shoppingCart.Id,
+                OriginalPrice = touristRoute.OriginalPrice,
+                DiscountPresent = touristRoute.DiscountPresent
+            };
+            //4 添加lineitem,并保存数据库
+            await _touristRouteRepository.AddShoppingCartItem(lineItem);
+            await _touristRouteRepository.SaveAsync();
+            return Ok(_mapper.Map<ShoppingCartDto>(shoppingCart));
         }
     }
 }

@@ -21,6 +21,7 @@ namespace FakeXiecheng.API.Services
         void DeleteTouristRoutePicture(TouristRoutePicture picture);
         Task<ShoppingCart> GetShoppingCartByUserId(string userId);
         Task CreateShoppingCart(ShoppingCart shoppingCart);
+        Task AddShoppingCartItem(LineItem lineItem);
         Task<bool> SaveAsync();
     }
 }
