@@ -86,5 +86,26 @@ namespace FakeXiecheng.API.Controllers
             await _touristRouteRepository.SaveAsync();
             return Ok(_mapper.Map<ShoppingCartDto>(shoppingCart));
         }
+        /// <summary>
+        /// 从购物车删除商品
+        /// http://localhost:5000/api/shoppingcart/items/1
+        /// </summary>
+        /// <param name="itemId"></param>
+        /// <returns></returns>
+        [HttpDelete("items/{itemId}")]
+        [Authorize(AuthenticationSchemes = "Bearer")]
+        public async Task<IActionResult> DeleteShoppingCartItem([FromRoute] int itemId)
+        {
+            //1 获取lineitem数据
+            var lineItem = await _touristRouteRepository.GetShoppingCartIntemByItemId(itemId);
+            if (lineItem == null)
+            {
+                return NotFound("购物车商品找不到");
+            }
+            _touristRouteRepository.DeleteShoppingCartItem(lineItem);
+            await _touristRouteRepository.SaveAsync();
+
+            return NoContent();
+        }
     }
 }

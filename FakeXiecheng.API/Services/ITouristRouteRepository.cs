@@ -8,6 +8,7 @@ namespace FakeXiecheng.API.Services
 {
     public interface ITouristRouteRepository
     {
+        Task<bool> SaveAsync();
         Task<IEnumerable<TouristRoute>> GetTouristRoutesAsync(string keyword, string ratingOperator, int? ratingValue);
         Task<TouristRoute> GetTouristRouteAsync(Guid touristRouteId);
         Task<bool> TouristRouteExistsAsync(Guid touristRouteId);
@@ -22,6 +23,8 @@ namespace FakeXiecheng.API.Services
         Task<ShoppingCart> GetShoppingCartByUserId(string userId);
         Task CreateShoppingCart(ShoppingCart shoppingCart);
         Task AddShoppingCartItem(LineItem lineItem);
-        Task<bool> SaveAsync();
+        Task<LineItem> GetShoppingCartIntemByItemId(int lineItemId);
+        void DeleteShoppingCartItem(LineItem lineItem);
+        
     }
 }

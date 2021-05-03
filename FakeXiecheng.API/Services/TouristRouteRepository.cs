@@ -16,6 +16,11 @@ namespace FakeXiecheng.API.Services
             _context = context;
         }
 
+        public async Task<bool> SaveAsync()
+        {
+            return (await _context.SaveChangesAsync() >= 0);
+        }
+
         public async Task<TouristRoute> GetTouristRouteAsync(Guid touristRouteId)
         {
             return await _context.TouristRoutes.Include(t => t.TouristRoutePictures).FirstOrDefaultAsync(n => n.Id == touristRouteId);
@@ -131,11 +136,15 @@ namespace FakeXiecheng.API.Services
         {
             await _context.LineItems.AddAsync(lineItem);
         }
-        public async Task<bool> SaveAsync()
+       
+        public async Task<LineItem> GetShoppingCartIntemByItemId(int lineItemId)
         {
-            return (await _context.SaveChangesAsync() >= 0);
+            return await _context.LineItems.Where(li => li.Id == lineItemId).FirstOrDefaultAsync();
         }
 
-       
+        public void DeleteShoppingCartItem(LineItem lineItem)
+        {
+           _context.LineItems.Remove(lineItem);
+        }
     }
 }
