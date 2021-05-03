@@ -12,7 +12,10 @@ namespace FakeXiecheng.API.Moldes
         /// 地址信息
         /// </summary>
         public string Address { get; set; }
-        //shooppingCart
+        /// <summary>
+        /// 购物车
+        /// </summary>
+        public ShoppingCart ShoppingCart { get; set; }
         //Order
         /// <summary>
         ///用户角色
