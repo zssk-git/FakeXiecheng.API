@@ -28,5 +28,7 @@ namespace FakeXiecheng.API.Services
         Task<IEnumerable<LineItem>> GetShoppingCartsByIdListAsync(IEnumerable<int> ids);
         void DeleteShoppingCartItems(IEnumerable<LineItem> lineItems);
         Task AddOrderAsync(Order order);
+        Task<IEnumerable<Order>> GetOrdersByUserId(string userId);
+        Task<Order> GetOrderById(Guid orderId);
     }
 }
