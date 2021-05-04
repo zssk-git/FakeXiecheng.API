@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using FakeXiecheng.API.Dtos;
 using FakeXiecheng.API.Moldes;
+using FakeXiecheng.API.ResourceParameters;
 using FakeXiecheng.API.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -29,16 +30,17 @@ namespace FakeXiecheng.API.Controllers
         /// <summary>
         /// 获取用户订单
         /// http://localhost:5000/api/orders/
+        /// http://localhost:5000/api/orders?pagesize=5&pagenumber=1
         /// </summary>
         /// <returns></returns>
         [HttpGet]
         [Authorize(AuthenticationSchemes = "Bearer")]
-        public async Task<IActionResult> GetOrders()
+        public async Task<IActionResult> GetOrders([FromQuery] PaginationResourceParamaters pgrParamaters)
         {
             //1. 获取当前用户
             var userID = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
             //2.使用用户id来获取订单历史记录
-            var orders = await _touristRouteRepository.GetOrdersByUserId(userID);
+            var orders = await _touristRouteRepository.GetOrdersByUserId(userID,pgrParamaters.PageSize,pgrParamaters.PageNumber);
 
             return Ok(_mapper.Map<IEnumerable<OrderDto>>(orders));
         }

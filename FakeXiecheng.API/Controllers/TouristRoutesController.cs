@@ -69,19 +69,22 @@ namespace FakeXiecheng.API.Controllers
         ///  http://localhost:5000/api/TouristRoutes?Keyword=埃及&RatingOperator=largerThan&RatingValue=3
         ///  http://localhost:5000/api/TouristRoutes?Keyword=埃及&Rating=largerThan4
         ///  http://localhost:5000/api/TouristRoutes?Rating=largerThan4
+        ///  http://localhost:5000/api/TouristRoutes?keyword=埃及&pagesize=5&pagenumber=1
         /// </summary>
         /// <param name="parameters"></param>
         /// <returns></returns>
         [HttpGet]
-        public async Task<IActionResult> GetTouristRoutes([FromQuery] TouristRouteResourceParameters parameters)
+        public async Task<IActionResult> GetTouristRoutes(
+            [FromQuery] TouristRouteResourceParameters trrParameters,
+            [FromQuery] PaginationResourceParamaters pgrParamaters)
         {
             
             var touristRoutesFromRepo = await _touristRouteRepository.GetTouristRoutesAsync(
-                parameters.Keyword, 
-                parameters.RatingOperator, 
-                parameters.RatingValue,
-                parameters.PageSize,
-                parameters.PageNumber
+                trrParameters.Keyword,
+                trrParameters.RatingOperator,
+                trrParameters.RatingValue,
+                pgrParamaters.PageSize,
+                pgrParamaters.PageNumber
                 );
             if (touristRoutesFromRepo == null || touristRoutesFromRepo.Count() <= 0)
             {
