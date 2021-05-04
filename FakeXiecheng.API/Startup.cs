@@ -22,6 +22,7 @@ using System.Text;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Identity;
 using FakeXiecheng.API.Moldes;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
 
 namespace FakeXiecheng.API
 {
@@ -99,6 +100,10 @@ namespace FakeXiecheng.API
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "FakeXiecheng.API", Version = "v1" });
             });
+
+            services.AddHttpClient();
+
+            services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

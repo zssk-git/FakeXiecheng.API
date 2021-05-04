@@ -37,20 +37,21 @@ namespace FakeXiecheng.API.Services
             }
             if (ratingValue >= 0)
             {
-
-                //switch (ratingOperator)
-                //{
-                //    case "largerThan":
-                //        result = result.Where(t => t.Rating >= ratingValue);
-                //        break;
-                //    case "lessThan":
-                //        result = result.Where(t => t.Rating <= ratingValue);
-                //        break;
-                //    case "equalTo":
-                //    default:
-                //        result = result.Where(t => t.Rating == ratingValue);
-                //        break;
-                //}
+                /**
+                switch (ratingOperator)
+                {
+                    case "largerThan":
+                        result = result.Where(t => t.Rating >= ratingValue);
+                        break;
+                    case "lessThan":
+                        result = result.Where(t => t.Rating <= ratingValue);
+                        break;
+                    case "equalTo":
+                    default:
+                        result = result.Where(t => t.Rating == ratingValue);
+                        break;
+                }
+                */
 
                 result = ratingOperator switch
                 {
