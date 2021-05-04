@@ -63,6 +63,10 @@ Pomelo.EntityFrameworkCore.MySql
   dotnet ef migrations add ShoppingCartMigration
   dotnet ef database update
   
+  ----订单模型开发与数据库更新----
+  dotnet ef migrations add OrderMigration
+  dotnet ef database update
+  
 
 
 
