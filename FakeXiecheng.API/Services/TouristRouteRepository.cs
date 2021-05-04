@@ -26,7 +26,7 @@ namespace FakeXiecheng.API.Services
             return await _context.TouristRoutes.Include(t => t.TouristRoutePictures).FirstOrDefaultAsync(n => n.Id == touristRouteId);
         }
 
-        public async Task<IEnumerable<TouristRoute>> GetTouristRoutesAsync(string keyword, string ratingOperator, int? ratingValue)
+        public async Task<IEnumerable<TouristRoute>> GetTouristRoutesAsync(string keyword, string ratingOperator, int? ratingValue, int pageSize, int pageNumber)
         {
             IQueryable<TouristRoute> result = _context.TouristRoutes.Include(t => t.TouristRoutePictures);
             if (!string.IsNullOrWhiteSpace(keyword))
@@ -58,6 +58,13 @@ namespace FakeXiecheng.API.Services
                     _ => result.Where(t => t.Rating == ratingValue),
                 };
             }
+            //pagination
+            //skip
+            var skip = (pageNumber - 1) * pageSize;
+            result = result.Skip(skip);
+            //以pagesize为标准显示一定量的数据
+            result = result.Take(pageSize);
+
             //include vs jion
             //return _context.TouristRoutes.Include(t => t.TouristRoutePictures);
             return await result.ToListAsync();
