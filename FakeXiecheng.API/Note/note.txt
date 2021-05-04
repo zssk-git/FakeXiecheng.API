@@ -66,6 +66,10 @@ Pomelo.EntityFrameworkCore.MySql
   ----订单模型开发与数据库更新----
   dotnet ef migrations add OrderMigration
   dotnet ef database update
+
+  ---使用Stateless实现订单状态机---
+  -----Nuget-----
+  Stateless
   
 
 
