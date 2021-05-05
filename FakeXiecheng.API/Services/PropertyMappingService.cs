@@ -14,7 +14,7 @@ namespace FakeXiecheng.API.Services
             {
                 { "Id", new PropertyMappingValue(new List<string>(){ "Id" })},
                 { "Title", new PropertyMappingValue(new List<string>(){ "Title" })},
-                { "Reting", new PropertyMappingValue(new List<string>(){ "Reting" })},
+                { "Rating", new PropertyMappingValue(new List<string>(){ "Rating" })},
                 { "OriginalPrice", new PropertyMappingValue(new List<string>(){ "OriginalPrice"})}
             };
         private IList<IPropertyMapping> _propertyMappings = new List<IPropertyMapping>();

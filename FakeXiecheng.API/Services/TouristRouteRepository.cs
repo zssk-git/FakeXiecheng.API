@@ -1,4 +1,5 @@
 ﻿using FakeXiecheng.API.Database;
+using FakeXiecheng.API.Dtos;
 using FakeXiecheng.API.Helper;
 using FakeXiecheng.API.Moldes;
 using Microsoft.EntityFrameworkCore;
@@ -12,9 +13,11 @@ namespace FakeXiecheng.API.Services
     public class TouristRouteRepository : ITouristRouteRepository
     {
         private readonly AppDbContext _context;
-        public TouristRouteRepository(AppDbContext context)
+        private readonly IPropertyMappingService _propertyMappingService;
+        public TouristRouteRepository(AppDbContext context ,IPropertyMappingService propertyMappingService)
         {
             _context = context;
+            _propertyMappingService = propertyMappingService;
         }
 
         public async Task<bool> SaveAsync()
@@ -75,11 +78,8 @@ namespace FakeXiecheng.API.Services
             */
             if (!string.IsNullOrWhiteSpace(orderBy))
             {
-                if (orderBy.ToLowerInvariant() == "originalprice")
-                {
-                    result = result.OrderBy(t => t.OriginalPrice);
-                }
-                //result.ApplySort(orderBy, _mappingDictionary);
+                var touristRouteMappingDictionnary = _propertyMappingService.GetPropertyMapping<TouristRouteDto,TouristRoute>();
+                result = result.ApplySort(orderBy, touristRouteMappingDictionnary);
             }
             return await PaginationLis<TouristRoute>.CreateAync(pageNumber,pageSize,result);
         }

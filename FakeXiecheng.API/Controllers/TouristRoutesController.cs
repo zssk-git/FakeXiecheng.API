@@ -113,6 +113,8 @@ namespace FakeXiecheng.API.Controllers
         ///  http://localhost:5000/api/TouristRoutes?Rating=largerThan4
         ///  http://localhost:5000/api/TouristRoutes?keyword=埃及&pagesize=5&pagenumber=1
         ///  http://localhost:5000/api/TouristRoutes?orderby=originalPrice
+        ///  http://localhost:5000/api/TouristRoutes?orderby=originalPrice desc
+        ///  http://localhost:5000/api/TouristRoutes?orderby=rating desc ,originalPrice  desc
         /// </summary>
         /// <param name="parameters"></param>
         /// <returns></returns>
