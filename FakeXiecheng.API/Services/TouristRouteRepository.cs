@@ -79,7 +79,7 @@ namespace FakeXiecheng.API.Services
                 {
                     result = result.OrderBy(t => t.OriginalPrice);
                 }
-                
+                //result.ApplySort(orderBy, _mappingDictionary);
             }
             return await PaginationLis<TouristRoute>.CreateAync(pageNumber,pageSize,result);
         }

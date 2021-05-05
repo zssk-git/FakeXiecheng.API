@@ -70,6 +70,11 @@ Pomelo.EntityFrameworkCore.MySql
   ---使用Stateless实现订单状态机---
   -----Nuget-----
   Stateless
+
+
+  ---数据排序---
+  ---Nuget-----
+  System.Linq.Dynamic.Core
   
 
 
