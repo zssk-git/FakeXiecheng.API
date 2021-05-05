@@ -27,7 +27,8 @@ namespace FakeXiecheng.API.Services
             return await _context.TouristRoutes.Include(t => t.TouristRoutePictures).FirstOrDefaultAsync(n => n.Id == touristRouteId);
         }
 
-        public async Task<PaginationLis<TouristRoute>> GetTouristRoutesAsync(string keyword, string ratingOperator, int? ratingValue, int pageSize, int pageNumber)
+        public async Task<PaginationLis<TouristRoute>> GetTouristRoutesAsync(string keyword, string ratingOperator, 
+            int? ratingValue, int pageSize, int pageNumber,string orderBy)
         {
             IQueryable<TouristRoute> result = _context.TouristRoutes.Include(t => t.TouristRoutePictures);
             if (!string.IsNullOrWhiteSpace(keyword))
@@ -72,6 +73,14 @@ namespace FakeXiecheng.API.Services
             //return _context.TouristRoutes.Include(t => t.TouristRoutePictures);
             return await result.ToListAsync();
             */
+            if (!string.IsNullOrWhiteSpace(orderBy))
+            {
+                if (orderBy.ToLowerInvariant() == "originalprice")
+                {
+                    result = result.OrderBy(t => t.OriginalPrice);
+                }
+                
+            }
             return await PaginationLis<TouristRoute>.CreateAync(pageNumber,pageSize,result);
         }
 

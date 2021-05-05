@@ -112,6 +112,7 @@ namespace FakeXiecheng.API.Controllers
         ///  http://localhost:5000/api/TouristRoutes?Keyword=埃及&Rating=largerThan4
         ///  http://localhost:5000/api/TouristRoutes?Rating=largerThan4
         ///  http://localhost:5000/api/TouristRoutes?keyword=埃及&pagesize=5&pagenumber=1
+        ///  http://localhost:5000/api/TouristRoutes?orderby=originalPrice
         /// </summary>
         /// <param name="parameters"></param>
         /// <returns></returns>
@@ -126,7 +127,9 @@ namespace FakeXiecheng.API.Controllers
                 trrParameters.RatingOperator,
                 trrParameters.RatingValue,
                 pgrParamaters.PageSize,
-                pgrParamaters.PageNumber
+                pgrParamaters.PageNumber,
+                trrParameters.OrderBy
+                
                 );
             if (touristRoutesFromRepo == null || touristRoutesFromRepo.Count() <= 0)
             {
