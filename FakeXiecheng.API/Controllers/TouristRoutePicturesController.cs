@@ -30,7 +30,7 @@ namespace FakeXiecheng.API.Controllers
         /// </summary>
         /// <param name="touristRouteId"></param>
         /// <returns></returns>
-        [HttpGet]
+        [HttpGet(Name = "GetPictureListForTouristRoute")]
         public async Task<IActionResult> GetPictureListForTouristRoute(Guid touristRouteId)
         {
             if (! await _touristRouteRepository.TouristRouteExistsAsync(touristRouteId))
@@ -71,7 +71,7 @@ namespace FakeXiecheng.API.Controllers
         /// <param name="touristRouteId"></param>
         /// <param name="touristRoutePictureForCreationDto"></param>
         /// <returns></returns>
-        [HttpPost]
+        [HttpPost(Name = "CreateTouristRoutePicture")]
         [Authorize(AuthenticationSchemes = "Bearer")]
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> CreateTouristRoutePicture([FromRoute] Guid touristRouteId,[FromBody] TouristRoutePictureForCreationDto touristRoutePictureForCreationDto)
