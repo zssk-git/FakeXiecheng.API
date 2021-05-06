@@ -139,6 +139,10 @@ namespace FakeXiecheng.API.Controllers
             {
                 return BadRequest("请输入正确的排序参数");
             }
+            if (!_propertyMappingService.IsPropertiesExists<TouristRouteDto>(trrParameters.Fields))
+            {
+                return BadRequest("请输入正确的塑性参数");
+            } 
 
             var touristRoutesFromRepo = await _touristRouteRepository.GetTouristRoutesAsync(
                 trrParameters.Keyword,
@@ -179,11 +183,12 @@ namespace FakeXiecheng.API.Controllers
         /// 通过Id获取TouristRoute
         /// api/touristRoutes/{touristRouteId}
         /// http://localhost:5000/api/TouristRoutes/39996f34-013c-4fc6-b1b3-0c1036c47112
+        /// http://localhost:5000/api/TouristRoutes/06f8370d-52f2-4766-bf38-f115cd62dc97?fileds=id,title
         /// </summary>
         /// <param name="touristRouteId"></param>
         /// <returns></returns>
         [HttpGet("{touristRouteId}", Name = "GetTouristRouteById")]
-        public async Task<IActionResult> GetTouristRouteById(Guid touristRouteId)
+        public async Task<IActionResult> GetTouristRouteById(Guid touristRouteId,string fileds)
         {
             var touristRouteFromRepo = await _touristRouteRepository.GetTouristRouteAsync(touristRouteId);
             if (touristRouteFromRepo == null)
@@ -211,7 +216,7 @@ namespace FakeXiecheng.API.Controllers
             */
             var touristRouteDto = _mapper.Map<TouristRouteDto>(touristRouteFromRepo);
 
-            return Ok(touristRouteDto);
+            return Ok(touristRouteDto.ShapeData(fileds));
         }
         /// <summary>
         /// 添加TouristRoute
