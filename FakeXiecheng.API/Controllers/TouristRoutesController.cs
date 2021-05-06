@@ -177,8 +177,40 @@ namespace FakeXiecheng.API.Controllers
             };
             Response.Headers.Add("x-pagination", Newtonsoft.Json.JsonConvert.SerializeObject(paginationMetadata));
 
-            return Ok(touristRoutesDto.ShapeData(trrParameters.Fields));
+            //return Ok(touristRoutesDto.ShapeData(trrParameters.Fields));
+
+            var shapedDtoList = touristRoutesDto.ShapeData(trrParameters.Fields);
+            var linkDto = CreateLinksForTouristRouteList(trrParameters, pgrParamaters);
+            var shapedDtoWithLinklist = shapedDtoList.Select(t =>
+            {
+                var touristRouteDictionary = t as IDictionary<string, object>;
+                var links = CreateLinkForTouristRoute((Guid)touristRouteDictionary["Id"], null);
+                touristRouteDictionary.Add("links", links);
+                return touristRouteDictionary;
+            });
+            var resoult = new
+            {
+                value = shapedDtoWithLinklist,
+                links = linkDto
+            };
+            return Ok(resoult);
+                
         }
+
+        private IEnumerable<LinkDto> CreateLinksForTouristRouteList(
+            TouristRouteResourceParameters trrParameters,
+            PaginationResourceParamaters pgrParamaters)
+        {
+            var links = new List<LinkDto>();
+            //添加self，自我链接
+            links.Add(new LinkDto(GenerateTouristRouteResoutceURL(trrParameters, pgrParamaters, ResourceUrlType.CurrentPage),"self","GET"));
+
+            //"api/touristRoutes"
+            //添加创建旅游路线
+            links.Add(new LinkDto(Url.Link("CreateTouristRoute", null),"create_tourist_route","POST"));
+            return links;
+        }
+
         /// <summary>
         /// 通过Id获取TouristRoute
         /// api/touristRoutes/{touristRouteId}
@@ -271,7 +303,7 @@ namespace FakeXiecheng.API.Controllers
            ]
          }
          */
-        [HttpPost]
+        [HttpPost(Name = "CreateTouristRoute")]
         [Authorize(AuthenticationSchemes = "Bearer")]
         //[Authorize(Roles = "Admin")]
         [Authorize]
