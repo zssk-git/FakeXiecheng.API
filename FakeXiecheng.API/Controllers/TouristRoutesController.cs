@@ -84,6 +84,7 @@ namespace FakeXiecheng.API.Controllers
                 ResourceUrlType.PreviousPage => _urlHelper.Link("GetTouristRoutes",
                 new
                 {
+                    fileds = trrParameters.Fields,
                     orderBy = trrParameters.OrderBy,
                     keyword = trrParameters.Keyword,
                     rating = trrParameters.Rating,
@@ -93,6 +94,7 @@ namespace FakeXiecheng.API.Controllers
                 ResourceUrlType.NextPage => _urlHelper.Link("GetTouristRoutes",
                new
                {
+                   fileds = trrParameters.Fields,
                    orderBy = trrParameters.OrderBy,
                    keyword = trrParameters.Keyword,
                    rating = trrParameters.Rating,
@@ -102,6 +104,7 @@ namespace FakeXiecheng.API.Controllers
                 _ => _urlHelper.Link("GetTouristRoutes",
                new
                {
+                   fileds = trrParameters.Fields,
                    orderBy = trrParameters.OrderBy,
                    keyword = trrParameters.Keyword,
                    rating = trrParameters.Rating,
@@ -122,6 +125,7 @@ namespace FakeXiecheng.API.Controllers
         ///  http://localhost:5000/api/TouristRoutes?orderby=originalPrice desc
         ///  http://localhost:5000/api/TouristRoutes?orderby=rating desc ,originalPrice  desc
         ///  http://localhost:5000/api/TouristRoutes?pagesize=5&pagenumber=3&rating=largerThan2 desc &orderby=originalprice desc
+        ///  http://localhost:5000/api/TouristRoutes?fields=id,title
         /// </summary>
         /// <param name="parameters"></param>
         /// <returns></returns>
@@ -169,7 +173,7 @@ namespace FakeXiecheng.API.Controllers
             };
             Response.Headers.Add("x-pagination", Newtonsoft.Json.JsonConvert.SerializeObject(paginationMetadata));
 
-            return Ok(touristRoutesDto);
+            return Ok(touristRoutesDto.ShapeData(trrParameters.Fields));
         }
         /// <summary>
         /// 通过Id获取TouristRoute
