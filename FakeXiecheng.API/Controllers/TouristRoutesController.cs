@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Net.Http.Headers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -117,6 +118,9 @@ namespace FakeXiecheng.API.Controllers
         /// <summary>
         ///  获取所有TouristRoutes
         ///  api/touristRoutes?keyword=传入的参数&rating=largerThan2
+        ///  1.Accept   application/json -> 旅游路线资源
+        ///  2.Accept   application/vnd.mycompany.hateoas+json 自定义媒体类型
+        ///  ---供应商特定媒体类型：vnd --是vender的缩写，mycompany --是自定义的标识，公司名，hateoas --表示返回的响应要包含超媒体链接。+json --表示输出的数据结构
         ///  http://localhost:5000/api/TouristRoutes?Keyword=埃及&RatingOperator=largerThan&RatingValue=3
         ///  http://localhost:5000/api/TouristRoutes?Keyword=埃及&Rating=largerThan4
         ///  http://localhost:5000/api/TouristRoutes?Rating=largerThan4
@@ -132,8 +136,13 @@ namespace FakeXiecheng.API.Controllers
         [HttpGet(Name = "GetTouristRoutes")]
         public async Task<IActionResult> GetTouristRoutes(
             [FromQuery] TouristRouteResourceParameters trrParameters,
-            [FromQuery] PaginationResourceParamaters pgrParamaters)
+            [FromQuery] PaginationResourceParamaters pgrParamaters,
+            [FromHeader (Name = "Accept")] string mediaType)
         {
+            if (!MediaTypeHeaderValue.TryParse(mediaType,out MediaTypeHeaderValue parsedMediatype))
+            {
+                return BadRequest();
+            }
 
             if (!_propertyMappingService.IsMappingExists<TouristRouteDto,TouristRoute>(trrParameters.OrderBy))
             {
@@ -180,21 +189,24 @@ namespace FakeXiecheng.API.Controllers
             //return Ok(touristRoutesDto.ShapeData(trrParameters.Fields));
 
             var shapedDtoList = touristRoutesDto.ShapeData(trrParameters.Fields);
-            var linkDto = CreateLinksForTouristRouteList(trrParameters, pgrParamaters);
-            var shapedDtoWithLinklist = shapedDtoList.Select(t =>
+            if (parsedMediatype.MediaType == "application/vnd.zssk.hateoas+json")
             {
-                var touristRouteDictionary = t as IDictionary<string, object>;
-                var links = CreateLinkForTouristRoute((Guid)touristRouteDictionary["Id"], null);
-                touristRouteDictionary.Add("links", links);
-                return touristRouteDictionary;
-            });
-            var resoult = new
-            {
-                value = shapedDtoWithLinklist,
-                links = linkDto
-            };
-            return Ok(resoult);
-                
+                var linkDto = CreateLinksForTouristRouteList(trrParameters, pgrParamaters);
+                var shapedDtoWithLinklist = shapedDtoList.Select(t =>
+                {
+                    var touristRouteDictionary = t as IDictionary<string, object>;
+                    var links = CreateLinkForTouristRoute((Guid)touristRouteDictionary["Id"], null);
+                    touristRouteDictionary.Add("links", links);
+                    return touristRouteDictionary;
+                });
+                var resoult = new
+                {
+                    value = shapedDtoWithLinklist,
+                    links = linkDto
+                };
+                return Ok(resoult);
+            }
+            return Ok(shapedDtoList);
         }
 
         private IEnumerable<LinkDto> CreateLinksForTouristRouteList(
