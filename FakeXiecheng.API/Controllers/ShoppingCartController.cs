@@ -35,7 +35,7 @@ namespace FakeXiecheng.API.Controllers
         /// http://localhost:5000/api/shoppingcart
         /// </summary>
         /// <returns></returns>
-        [HttpGet]
+        [HttpGet (Name = "GetShoppingCart")]
         [Authorize]
         public async Task<IActionResult> GetShoppingCart()
         {

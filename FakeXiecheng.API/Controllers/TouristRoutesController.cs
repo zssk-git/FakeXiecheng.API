@@ -258,7 +258,7 @@ namespace FakeXiecheng.API.Controllers
         private IEnumerable<LinkDto> CreateLinkForTouristRoute(Guid touristRouteId, string fields)
         {
             var links = new List<LinkDto>();
-            links.Add(new LinkDto(Url.Link("GetTouristRouteById", new { touristRouteId, fields }), "self", "Get"));
+            links.Add(new LinkDto(Url.Link("GetTouristRouteById", new { touristRouteId, fields }), "self", "GET"));
             //更新
             links.Add(new LinkDto(Url.Link("UpdateTouristRoute", new { touristRouteId }), "update", "PUT"));
             //局部更新

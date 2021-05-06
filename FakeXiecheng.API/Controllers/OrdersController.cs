@@ -33,7 +33,7 @@ namespace FakeXiecheng.API.Controllers
         /// http://localhost:5000/api/orders?pagesize=5&pagenumber=1
         /// </summary>
         /// <returns></returns>
-        [HttpGet]
+        [HttpGet(Name = "GetOrders")]
         [Authorize(AuthenticationSchemes = "Bearer")]
         public async Task<IActionResult> GetOrders([FromQuery] PaginationResourceParamaters pgrParamaters)
         {
