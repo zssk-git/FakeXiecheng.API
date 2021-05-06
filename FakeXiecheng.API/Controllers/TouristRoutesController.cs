@@ -273,15 +273,23 @@ namespace FakeXiecheng.API.Controllers
          */
         [HttpPost]
         [Authorize(AuthenticationSchemes = "Bearer")]
-        [Authorize(Roles = "Admin")]
-        //[Authorize]
+        //[Authorize(Roles = "Admin")]
+        [Authorize]
         public async Task<IActionResult> CreateTouristRoute([FromBody] TouristRouteForCreationDto touristRouteForCreationDto)
         {
             var touristRouteModel = _mapper.Map<TouristRoute>(touristRouteForCreationDto);
             _touristRouteRepository.AddTouristRoute(touristRouteModel);
             await _touristRouteRepository.SaveAsync();
             var touristRouteToReture = _mapper.Map<TouristRouteDto>(touristRouteModel);
-            return CreatedAtRoute("GetTouristRouteById", new { touristRouteId = touristRouteToReture.Id }, touristRouteToReture);
+
+            var links = CreateLinkForTouristRoute(touristRouteModel.Id, null);
+
+            var result = touristRouteToReture.ShapeData(null) as IDictionary<string,object>;
+
+            result.Add("links", links);
+            //return CreatedAtRoute("GetTouristRouteById", new { touristRouteId = touristRouteToReture.Id }, touristRouteToReture);
+            return CreatedAtRoute("GetTouristRouteById", new { touristRouteId = result["Id"] }, result);
+
         }
         /// <summary>
         /// 全局更新TouristRoute
