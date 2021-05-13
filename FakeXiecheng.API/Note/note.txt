@@ -73,7 +73,7 @@ Pomelo.EntityFrameworkCore.MySql
 
 
   ---数据排序---
-  ---Nuget-----
+  ---Nuget----
   System.Linq.Dynamic.Core
   
 
