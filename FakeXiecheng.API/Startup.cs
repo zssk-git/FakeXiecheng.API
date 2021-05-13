@@ -91,7 +91,8 @@ namespace FakeXiecheng.API
             {
                 //option.UseSqlServer("server=192.168.31.157,1433;Database=FakeXiechengDb;User Id=sa;Password=Sa123456");
                 //option.UseSqlServer(Configuration["DbContext:MsSQLConnectionString"]);
-                option.UseMySql(Configuration["DbContext:MySQLConnectionString"]);
+                //option.UseMySql(Configuration["DbContext:MySQLConnectionString"]);
+                option.UseMySql(Configuration["DbContext:MySQLDockerConnectionString"]);
             });
             //É¨ÃèprofileÎÄ¼þ
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
